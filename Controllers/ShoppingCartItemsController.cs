@@ -1,5 +1,6 @@
 ﻿using APIeCommerce.Context;
 using APIeCommerce.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -83,7 +84,7 @@ namespace APIeCommerce.Controllers
             }
         }
 
-        /*[Authorize]
+        [Authorize]
         [HttpPut("[action]{productId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -95,7 +96,7 @@ namespace APIeCommerce.Controllers
 
             if (user == null)
             {
-                return NotFound("Utilizador não encontrado.");
+                return NotFound("User not found.");
             }
 
             var shoppingCartItem = await _appDbContext.ShoppingCartItems.FirstOrDefaultAsync(s =>
@@ -107,11 +108,11 @@ namespace APIeCommerce.Controllers
                 shoppingCartItem.Total = shoppingCartItem.UnitPrice * shoppingCartItem.Quantity;
                 _appDbContext.Update(shoppingCartItem);
                 await _appDbContext.SaveChangesAsync();
-                return Ok("Foi aumentada a quantidade com sucesso");
+                return Ok("The quantity was increased successfully.");
             }
             else
             {
-                return NotFound("Nenhum item encontrado no carrinho");
+                return NotFound("No items found in cart.");
             }
         }
 
@@ -127,7 +128,7 @@ namespace APIeCommerce.Controllers
 
             if (user == null)
             {
-                return NotFound("Utilizador não encontrado.");
+                return NotFound("User not found.");
             }
 
             var shoppingCartItem = await _appDbContext.ShoppingCartItems.FirstOrDefaultAsync(s =>
@@ -143,19 +144,19 @@ namespace APIeCommerce.Controllers
                 {
                     _appDbContext.ShoppingCartItems.Remove(shoppingCartItem);
                     await _appDbContext.SaveChangesAsync();
-                    return Ok("Item removido com sucesso");
+                    return Ok("Item removed successfully.");
                 }
 
                 shoppingCartItem.Total = shoppingCartItem.UnitPrice * shoppingCartItem.Quantity;
                 _appDbContext.Update(shoppingCartItem);
                 await _appDbContext.SaveChangesAsync();
-                return Ok("Foi diminuida a quantidade com sucesso");
+                return Ok("The quantity was decreased successfully.");
             }
             else
             {
-                return NotFound("Nenhum item encontrado no carrinho");
+                return NotFound("No items found in cart.");
             }
-        }*/
+        }
 
         // PUT /api/ShoppingCartItems?produtoId = 1 & acao = "aumentar"
         // PUT /api/ShoppingCartItems?produtoId = 1 & acao = "diminuir"
@@ -168,7 +169,7 @@ namespace APIeCommerce.Controllers
         {
             // Este codigo recupera o endereço de e-mail do user autenticado do token JWT decodificado,
             // Claims representa as declarações associadas ao user autenticado
-            // Assim somente os users autenticados poderão aceder a este endpoint
+            // Apenas os users com autenticação podem aceder a este endpoint
             var userEmail = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
             var user = await _appDbContext.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
@@ -222,7 +223,7 @@ namespace APIeCommerce.Controllers
             }
         }
 
-        /*[Authorize]
+        [Authorize]
         [HttpDelete("{productId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -233,7 +234,7 @@ namespace APIeCommerce.Controllers
 
             if (user == null)
             {
-                return NotFound("Utilizador não encontrado.");
+                return NotFound("User not found.");
             }
 
             var shoppingCartItem = await _appDbContext.ShoppingCartItems.FirstOrDefaultAsync(s =>
@@ -243,12 +244,12 @@ namespace APIeCommerce.Controllers
             {
                 _appDbContext.ShoppingCartItems.Remove(shoppingCartItem);
                 await _appDbContext.SaveChangesAsync();
-                return Ok("Item removido com sucesso");
+                return Ok("Item removed successfully.");
             }
             else
             {
-                return NotFound("Nenhum item encontrado no carrinho");
+                return NotFound("No items found in cart.");
             }
-        }*/
+        }
     }
 }

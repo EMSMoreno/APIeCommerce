@@ -1,7 +1,4 @@
 ﻿using APIeCommerce.Entities;
-using System.Collections.Generic;
-using System.Reflection.Emit;
-using System;
 using Microsoft.EntityFrameworkCore;
 
 namespace APIeCommerce.Context
@@ -9,12 +6,15 @@ namespace APIeCommerce.Context
     public class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+
         public DbSet<User> Users { get; set; }
+
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<Product> Products { get; set; }
 
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
+
         public DbSet<Order> Orders { get; set; }
 
         public DbSet<OrderDetail> OrderDetails { get; set; }
